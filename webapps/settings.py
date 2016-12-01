@@ -133,7 +133,7 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = 'wah/static/'
 
-MEDIA_URL = '/media/'
+# MEDIA_URL = '/media/'
 
 MEDIA_ROOT = 'wah/media/'
 
@@ -143,3 +143,25 @@ EMAIL_HOST_USER = 'chaoxiw'
 EMAIL_HOST_PASSWORD = 'YANlu518@'
 EMAIL_PORT = '465'
 EMAIL_USE_TLS = True
+
+AWS_STORAGE_BUCKET_NAME = 'wahmedia'
+AWS_ACCESS_KEY_ID = 'AKIAJAY7YJXBJNZWWYQA'
+AWS_SECRET_ACCESS_KEY = '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'
+
+    # Tell django-storages that when coming up with the URL for an item in S3 storage, keep
+    # it simple - just use this domain plus the path. (If this isn't set, things get complicated).
+    # This controls how the `static` template tag from `staticfiles` gets expanded, if you're using it.
+    # We also use it in the next setting.
+    AWS_S3_CUSTOM_DOMAIN = '%s.s3-website-us-west-2.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+
+    MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+
+
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
+
+AWS_HEADERS = {  # see http://developer.yahoo.com/performance/rules.html#expires
+        'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
+        'Cache-Control': 'max-age=94608000',
+    }
