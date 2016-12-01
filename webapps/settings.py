@@ -79,10 +79,10 @@ WSGI_APPLICATION = 'webapps.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': NAME,                   # Or path to database file if using sqlite3.
+        'NAME': 'wah',                   # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': USER,
-        'PASSWORD': PASSWORD,
+        'USER': 'root',
+        'PASSWORD': '123',
     }
 }
 
@@ -137,9 +137,9 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = 'wah/media/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-#EMAIL_HOST = 'smtp.andrew.cmu.edu'
-#EMAIL_HOST_USER = 'ANDREWID'
-#EMAIL_HOST_PASSWORD = 'PASSWORD'
-#EMAIL_USE_TLS = True
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.andrew.cmu.edu'
+EMAIL_HOST_USER = 'chaoxiw'
+EMAIL_HOST_PASSWORD = 'YANlu518@'
+EMAIL_PORT = '465'
+EMAIL_USE_TLS = True
