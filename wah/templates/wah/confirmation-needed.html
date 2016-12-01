@@ -1,0 +1,16 @@
+{% extends "wah/base.html" %}
+
+{% block title %}WhereAmazingHappen-Need Confirmation{% endblock %}
+
+{% block content %}
+		<div class="title">
+			<h1 class="tt">Where Amazing Happens</h1>
+		</div>
+		<p class="text-middle">
+			A confirmation email has been sent to your {{email}}.  Please click the link 
+			in the email to finish your registration for Grumblr.
+		</p>
+		<div class="text-middle">
+			<a href="{% url 'login' %}" class="blue_font">Login</a>
+		</div>
+{% endblock %}

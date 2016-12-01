@@ -1,0 +1,25 @@
+{% extends "wah/base.html" %}
+
+{% block title %}WhereAmazingHappen-Register{% endblock %}
+
+{% block content %}
+    <h1 class="tt">Where Amazing Happens</h1>
+    <form class="sign-in-form" action="{% url 'register' %}" method="post">
+      {% for field in form.visible_fields %}
+      <div class="input-field col s6">
+            <td>{{field.label_tag}}</td>
+            <td>{{field}}</td>
+            <td style="color: red">{{field.errors}}</td>
+      </div>
+      {% endfor %}
+      {% for field in form.hidden_fields %}
+          {{field}}
+      {% endfor %}
+      <div style="padding-left: 85px">
+      <button class="btn waves-effect waves-light" type="submit" name="action">
+          Register
+      </button>
+      </div>
+      {% csrf_token %}
+    </form>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'wah/HomeBase.html' %}
+
+{% load static %}
+
+{% block title %}WhereAmazingHappen-Myalbum{% endblock %}
+
+{% block nav %}
+		<div class="navbar-fixed">
+		  <nav>
+		    <div class="nav-wrapper indigo lighten-2">
+		      <a href="{% url 'home' %}" class="brand-logo right">Where Amazing Happens</a>
+		      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+		      	<ul class="left hide-on-med-and-down">
+		      	<li><a href="{% url 'home' %}">Home</a></li>
+		        <li><a href="{% url 'paint' %}">Paint</a></li>
+		        <li class="active"><a href="{% url 'myalbum' %}">Personal Album</a></li>
+		        <li><a href="{% url 'friends' %}">Friends</a></li>
+		        <li><a href="{% url 'logout' %}">Log out</a></li>
+		      </ul>
+		      <ul class="side-nav" id="mobile-demo">
+		        <li><a href="{% url 'home' %}">Home</a></li>
+		        <li><a href="{% url 'paint' %}">Paint</a></li>
+		        <li class="active"><a href="{% url 'myalbum' %}">Personal Album</a></li>
+		        <li><a href="{% url 'friends' %}">Friends</a></li>
+		        <li><a href="{% url 'logout' %}">Log out</a></li>
+		      </ul>
+		    </div>
+		  </nav>
+		</div>
+{% endblock %}
+
+
+{% block content %}
+    <div class="row">
+      <div class="col s3">
+        <div>
+        	<ul id="slide-out" class="side-nav fixed">
+              <li><div class="userView">
+                <div class="background">
+                  <img src="{% static 'wah/images/background_small.jpg' %}">
+                </div>
+                <a href="{% url 'myalbum' %}">
+                  {% if prof.photo %}
+                    <img class="circle" src="{% url 'getavatar' user.username %}">
+                  {% else %}
+                    <img class="circle" src="{% static 'wah/images/default-avatar.jpg' %}">
+                  {% endif %}
+                </a>
+                <span class="white-text name">{{prof.profile_user}} ({{prof.first_name}} {{prof.last_name}})</span>
+                <span class="white-text name">Age: {{prof.age}}</span>
+                <span class="white-text name">Bio: {{prof.bio}}</span>
+              </div></li>
+              <li><a class="waves-effect" href="{% url 'paint' %}">Upload image</a></li>
+            </ul>
+          </div>
+        </div>
+
+     <div class="col s9">
+          {% if pictures %}
+          {% for pic in pictures %}
+              <div class="col s4">
+                  <div class="card small">
+                      <div class="card-image">
+                          <img class="materialboxed" data-caption="{{ pic.title }}" width="650" src="{% url 'get_pic' pic.id %}">
+                      </div>
+                      <div class="card-action">
+                          Title: {{ pic.title }}&nbsp;&nbsp;&nbsp;&nbsp;
+                          <a href="#" id="{{ pic.id }}" class="cover">set as cover</a>
+                          <div class="fb-share-button" data-href="http://localhost:8000{% url 'get_pic' pic.id %}" data-layout="button" data-size="small" data-mobile-iframe="false"></div>
+                          <div><a class="twitter-share-button" href="https://twitter.com/intent/tweet">Tweet</a></div>
+                      </div>
+                  </div>
+              </div>
+          {% endfor %}
+          {% else %}
+            <p>No picture in this album yet, please create one~</p>
+          {% endif %}
+      </div>
+{% endblock %}
+
+{% block addtional_js %}
+    <script type="text/javascript" src="{% static 'wah/js/viewalbum.js' %}"></script>
+{% endblock %}

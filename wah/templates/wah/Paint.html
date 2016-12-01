@@ -1,0 +1,142 @@
+{% extends 'wah/HomeBase.html' %}
+
+{% load static %}
+
+{% block title %}WhereAmazingHappen-Paint{% endblock %}
+
+{% block nav %}
+    <div class="navbar-fixed">
+		  <nav>
+		    <div class="nav-wrapper indigo lighten-2">
+		      <a href="{% url 'home' %}" class="brand-logo right">Where Amazing Happens</a>
+		      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+		      	<ul class="left hide-on-med-and-down">
+		      	<li><a href="{% url 'home' %}">Home</a></li>
+		        <li class="active"><a href="#">Paint</a></li>
+		        <li><a href="{% url 'myalbum' %}">Personal Album</a></li>
+		        <li><a href="{% url 'friends' %}">Friends</a></li>
+		        <li><a href="{% url 'logout' %}">Log out</a></li>
+		      </ul>
+		      <ul class="side-nav" id="mobile-demo">
+		        <li><a href="{% url 'home' %}">Home</a></li>
+		        <li class="active"><a href="#">Paint</a></li>
+		        <li><a href="{% url 'myalbum' %}">Personal Album</a></li>
+		        <li><a href="{% url 'friends' %}">Friends</a></li>
+		        <li><a href="{% url 'logout' %}">Log out</a></li>
+		      </ul>
+		    </div>
+		  </nav>
+		</div>
+{% endblock %}
+
+
+{% block content %}
+    <div class="row">
+      <div class="col s3">
+      	<ul id="slide-out" class="side-nav fixed change-height">
+          <li><div class="userView">
+            <div class="background">
+              <img src="{% static 'wah/images/background_small.jpg' %}">
+            </div>
+            <a href="{% url 'myalbum' %}">
+              {% if prof.photo %}
+                <img class="circle" src="{% url 'getavatar' user.username %}">
+              {% else %}
+                <img class="circle" src="{% static 'wah/images/default-avatar.jpg' %}">
+              {% endif %}
+            </a>
+            <span class="white-text name">{{prof.profile_user}} ({{prof.first_name}} {{prof.last_name}})</span>
+            <span class="white-text name">Age: {{prof.age}}</span>
+            <span class="white-text name">Bio: {{prof.bio}}</span>
+          </div></li>
+          <li><a class="waves-effect" id="image_upload_bind">Upload image</a></li>
+          <li><a class="waves-effect" id="add_filter">Add filter</a></li>
+          <li><a class="waves-effect" id="image_save">Save to album</a></li>
+          <li><a class="waves-effect" id="download_image">Download image</a></li>
+          <li><input type="file" id="image_upload" name="pic" class="input_invisible" accept="image/*"></li>
+        </ul>
+      </div>
+      <div class="col s9">
+        <a class="waves-effect waves-teal btn-flat" id="pencil"><i class="large material-icons">mode_edit</i></a>
+		<a class="waves-effect waves-teal btn-flat" id="rect"><i class="large material-icons">crop_square</i></a>
+		<input class="paint-input-color" name="line-color" type="color" id="select_color"></input>
+		<a class="waves-effect waves-red btn-flat space-add" id="clear">clear<i class="large material-icons left">layers_clear</i></a>
+		<div id="container">
+			<canvas id="myCanvas" width="600" height="400"></canvas>
+		</div>
+      </div>
+    </div>
+
+    <!-- the modal used to save image to album-->
+    <div id="create-modal-save-image" class="create-modal">
+        <div class="modal-content">
+            <span class="close" id="close-save-image">x</span>
+            <div id="error_messages"></div>
+            <form id="saving" class="image_to_save" method="post">
+                <input type="text" id="image_title" placeholder="title" required></input> 
+                <select id="save_to_album">
+                	<option value="" disabled selected>Please select an album</option>
+                	{% if albums %}
+                	{% for album in albums %}
+					<option value="{{album.title}}">{{album.title}}</option>
+					{% endfor %}
+					{% endif %}
+				</select> 
+                <input type="submit" value="Save" class="btn" />
+                {% csrf_token %}
+            </form>
+        </div>
+    </div>
+
+    <!-- the modal used to add filter to image-->
+    <div id="create-modal-add-filter" class="create-modal">
+        <div class="modal-content">
+            <span class="close" id="close-add-filter">x</span>
+	        <form><br><br>
+		      	<select id="select_filter">
+		        	<option value="none" disabled selected>Please select filter</option>
+		        	<option value="none_filter">None</option>
+					<option value="blur">Blur</option>
+					<option value="brightness">Brightness</option>
+					<option value="bump">Bump</option>
+					<option value="contrast">Contrast</option>
+					<option value="diffusion">Diffusion</option>
+					<option value="dither">Dither</option>
+					<option value="edge_detection">Edge Detection</option>
+					<option value="exposure">Exposure</option>
+					<option value="gamma">Gamma</option>
+					<option value="grayscale">Grayscale</option>
+					<option value="hue">Hue</option>
+					<option value="invert">Invert</option>
+					<option value="maximum">Maximum</option>
+					<option value="median">Median</option>
+					<option value="minimum">Minimum</option>
+					<option value="noise">Noise</option>
+					<option value="oil_painting">Oil painting</option>
+					<option value="opacity">Opacity</option>
+					<option value="pixelation">Pixelation</option>
+					<option value="posterize">Posterize</option>
+					<option value="saturation">Saturation</option>
+					<option value="sepia">Sepia</option>
+					<option value="sharpen">Sharpen</option>
+					<option value="solarize">Solarize</option>
+					<option value="blackandwhite">Black and White</option>
+					<option value="vignette">Vignette</option>
+				</select> 
+		      	<div id="filter_para">
+				</div>
+				<p>
+				  <label for="amount">Amount:</label>
+				  <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+				</p>
+				<a class="waves-effect waves-red btn" id="apply">Apply</a>
+			</form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block addtional_js %}
+	<script type="text/javascript" src="{% static 'wah/js/jquery-ui.js' %}"></script>
+	<script type="text/javascript" src="{% static 'wah/js/jsmanipulate.js' %}"></script>
+    <script type="text/javascript" src="{% static 'wah/js/canvasDraw.js' %}"></script>
+{% endblock %}

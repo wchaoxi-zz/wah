@@ -1,0 +1,106 @@
+{% extends "wah/HomeBase.html" %}
+
+{% load static %}
+
+{% block title %}WhereAmazingHappen-global{% endblock %}
+
+{% block nav %}
+		<div class="navbar-fixed">
+		  <nav>
+		    <div class="nav-wrapper indigo lighten-2">
+{#                    <a href="{% url 'home' %}" class="brand-logo right">Where Amazing Happens</a>#}
+                <form class="input-field right" action="{% url 'search' %}" method="post">
+                    <input id="search" type="search" name="msg" class="autocomplete" required>
+                    <label for="search"><i class="material-icons">search</i></label>
+                    <i class="material-icons">close</i>
+                    {% csrf_token %}
+                </form>
+
+		      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+		      	<ul class="left hide-on-med-and-down">
+		      	<li class="active"><a href="#">Home</a></li>
+		        <li><a href="{% url 'paint' %}">Paint</a></li>
+		        <li><a href="{% url 'myalbum' %}">Personal Album</a></li>
+		        <li><a href="{% url 'friends' %}">Friends</a></li>
+		        <li><a href="{% url 'logout' %}">Log out</a></li>
+		      </ul>
+		      <ul class="side-nav" id="mobile-demo">
+		        <li class="active"><a href="#">Home</a></li>
+		        <li><a href="{% url 'paint' %}">Paint</a></li>
+		        <li><a href="{% url 'myalbum' %}">Personal Album</a></li>
+		        <li><a href="{% url 'friends' %}">Friends</a></li>
+		        <li><a href="{% url 'logout' %}">Log out</a></li>
+		      </ul>
+		    </div>
+		  </nav>
+		</div>
+{% endblock %}
+
+
+{% block content %}
+	  <div class="row">
+      <div class="col s3">
+          <ul id="slide-out" class="side-nav fixed">
+            <li><div class="userView">
+              <div class="background">
+                <img src="{% static 'wah/images/background_small.jpg' %}">
+              </div>
+              <a href="{% url 'myalbum' %}">
+                {% if prof.photo %}
+                  <img class="circle" src="{% url 'getavatar' user.username %}">
+                {% else %}
+                  <img class="circle" src="{% static 'wah/images/default-avatar.jpg' %}">
+                {% endif %}
+              </a>
+              <span class="white-text name">{{prof.profile_user}} ({{prof.first_name}} {{prof.last_name}})</span>
+              <span class="white-text name">Age: {{prof.age}}</span>
+              <span class="white-text name">Bio: {{prof.bio}}</span>
+            </div></li>
+            <li><a class="waves-effect" href="{% url 'editprofile' %}">Edit profile</a></li>
+          </ul>
+      </div>
+
+
+      <div class="col s9">
+          {% for album in albums %}
+              <div class="card large col s6 offset-s2">
+                  <div class="card-image waves-effect waves-block waves-light">
+                      {% if user != album.user %}
+                        {% if album.cover %}
+                            <a href="{% url 'guest_view' album.id %}">
+                            <img src="{% url 'getcover' album.id %}"></a>
+                        {% else %}
+                            <a href="{% url 'guest_view' album.id %}">
+                            <img src="{% static 'wah/images/default_cover.jpg' %}"></a>
+                        {% endif %}
+                      {% else %}
+                        {% if album.cover %}
+                            <a href="{% url 'view_album' album.id %}">
+                            <img src="{% url 'getcover' album.id %}"></a>
+                        {% else %}
+                            <a href="{% url 'view_album' album.id %}">
+                            <img src="{% static 'wah/images/default_cover.jpg' %}"></a>
+                        {% endif %}
+                      {% endif %}
+                  </div>
+
+                  <div class="card-content">
+                      <span class="card-title activator grey-text text-darken-4">{{ album.title }}</span>
+                      <p>description: {{ album.description }}</p>
+                      <p>
+                          <img class="image-small" src="{% url 'getavatar' album.user %}">
+                          {{ album.user }}
+                      </p>
+                  </div>
+                  <div class="card-action" id="{{ album.id }}">
+                      <a href="#"><i class="small material-icons like">star</i></a>
+                      <a>{{ album.likes }}</a>
+                  </div>
+              </div>
+          {% endfor %}
+	  </div>
+{% endblock %}
+
+{% block addtional_js %}
+    <script type="text/javascript" src="{% static 'wah/js/globalstream.js' %}"></script>
+{% endblock %}

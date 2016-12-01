@@ -1,0 +1,31 @@
+{% extends "wah/base.html" %}
+
+{% block content %}
+
+		<h1 class="tt">Where Amazing Happens</h1>
+		{% if form.errors %}
+		<h4>Incorrect username and password</h4>
+		{% endif %}
+		<form class="sign-in-form" action="{% url 'login' %}" method="post">
+                <div class="input-field col s6">
+                  <td>{{ form.username.label_tag }}</td>
+                  <td>{{ form.username }}</td>
+                </div>
+                <div class="input-field col s6">
+                  <td>{{ form.password.label_tag }}</td>
+                  <td>{{ form.password }}</td>
+                </div>
+			<br>
+			<div style="padding-left: 85px">
+			<button class="btn waves-effect waves-light" type="submit" name="action">Login
+		      <i class="material-icons right">send</i>
+		    </button>
+			</div>
+			<input type="hidden" name="next" value="{{ next }}" />
+			{% csrf_token %}
+		</form>
+		<div class="text-middle">
+			<a href="{% url 'register' %}" class="blue_font">Do not have account? Sign up now</a>
+		</div>
+
+{% endblock %}

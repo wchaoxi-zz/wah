@@ -1,0 +1,115 @@
+{% extends 'wah/HomeBase.html' %}
+
+{% load static %}
+
+{% block title %}WhereAmazingHappen-Friends{% endblock %}
+
+{% block nav %}
+		<div class="navbar-fixed">
+		  <nav>
+		    <div class="nav-wrapper indigo lighten-2">
+		      <a href="{% url 'home' %}" class="brand-logo right">Where Amazing Happens</a>
+		      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+		      	<ul class="left hide-on-med-and-down">
+		      	<li><a href="{% url 'home' %}">Home</a></li>
+		        <li><a href="{% url 'paint' %}">Paint</a></li>
+		        <li><a href="{% url 'myalbum' %}">Personal Album</a></li>
+		        <li class="active"><a href="{% url 'friends' %}">Friends</a></li>
+		        <li><a href="{% url 'logout' %}">Log out</a></li>
+		      </ul>
+		      <ul class="side-nav" id="mobile-demo">
+		        <li><a href="{% url 'home' %}">Home</a></li>
+		        <li><a href="{% url 'paint' %}">Paint</a></li>
+		        <li><a href="{% url 'myalbum' %}">Personal Album</a></li>
+		        <li class="active"><a href="{% url 'friends' %}">Friends</a></li>
+		        <li><a href="{% url 'logout' %}">Log out</a></li>
+		      </ul>
+		    </div>
+		  </nav>
+		</div>
+{% endblock %}
+
+
+{% block content %}
+    <div class="row">
+      <div class="col s3">
+        <div>
+        	<ul id="slide-out" class="side-nav fixed">
+              <li><div class="userView">
+                <div class="background">
+                  <img src="{% static 'wah/images/background_small.jpg' %}">
+                </div>
+                <a href="{% url 'myalbum' %}">
+                  {% if prof.photo %}
+                    <img class="circle" src="{% url 'getavatar' user.username %}">
+                  {% else %}
+                    <img class="circle" src="{% static 'wah/images/default-avatar.jpg' %}">
+                  {% endif %}
+                </a>
+                <span class="white-text name">{{prof.profile_user}} ({{prof.first_name}} {{prof.last_name}})</span>
+                <span class="white-text name">Age: {{prof.age}}</span>
+                <span class="white-text name">Bio: {{prof.bio}}</span>
+              </div></li>
+              <li><a class="waves-effect" id="search-friends">Search friend</a></li>
+            </ul>
+          </div>
+        </div>
+
+
+<div class="col s6">
+      <p id="not-found"></p>
+      <p> Friend list:</p>
+     	<div class="collection">
+          {% for friend in friends_profile %}
+          <li class="collection-item avatar" style="background-color:white;" id="{{friend.profile_user}}">
+          <a = href="{% url 'foreign_profile' friend.profile_user.username %}">
+          	{% if friend.photo %}
+                    <img class="circle" alt="" src="{% url 'getavatar' friend.profile_user %}">
+                  {% else %}
+                    <img class="circle" alt="" src="{% static 'wah/images/default-avatar.jpg' %}">
+                  {% endif %}
+
+              <span>{{friend.profile_user}}&nbsp&nbsp({{friend.first_name}} {{friend.last_name}})</span>
+              <p>&nbsp&nbsp&nbsp&nbspBio:{{friend.bio}}</p>
+              </a>
+              <a class="secondary-content" href="{% url 'remove_friend' friend.profile_user %}">remove</a></li>
+
+          {% endfor %}
+        </div>
+        <br>
+        <p> Friend request:</p>
+        <div class="collection">
+          {% for friend in pending_friends_profile %}
+          <li class="collection-item avatar" style="background-color:white;" id="{{friend.profile_user}}">
+          <a>
+            {% if friend.photo %}
+                    <img class="circle" alt="" src="{% url 'getavatar' friend.profile_user %}">
+                  {% else %}
+                    <img class="circle" alt="" src="{% static 'wah/images/default-avatar.jpg' %}">
+                  {% endif %}
+
+              <span>{{friend.profile_user}}&nbsp&nbsp({{friend.first_name}} {{friend.last_name}})</span>
+              <p>&nbsp&nbsp&nbsp&nbspBio:{{friend.bio}}</p>
+              </a>
+              <div class="secondary-content">
+              <a href="{% url 'approve_friend' friend.profile_user %}">approve</a><br>
+              <a href="{% url 'decline_friend' friend.profile_user %}">decline</a><div></li>
+              
+          {% endfor %}
+        </div>
+
+            <!-- the modal used to search friends-->
+        <div id="search-create-modal" class="create-modal">
+            <div class="modal-content">
+                <span class="close" id="close">x</span>
+                  <input type="text" id="friend_name" required>
+                  <a class="waves-effect waves-red btn" id="apply">Apply</a>
+            </div>
+        </div>
+
+      </div>
+{% endblock %}
+
+{% block addtional_js %}
+    <script type="text/javascript" src="{% static 'wah/js/searchfriends.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends 'wah/HomeBase.html' %}
+
+{% load static %}
+
+{% block title %}WhereAmazingHappen-Myalbum{% endblock %}
+
+{% block nav %}
+        <div class="navbar-fixed">
+		  <nav>
+		    <div class="nav-wrapper indigo lighten-2">
+		      <a href="{% url 'home' %}" class="brand-logo right">Where Amazing Happens</a>
+		      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+		      	<ul class="left hide-on-med-and-down">
+		      	<li><a href="{% url 'home' %}">Home</a></li>
+		        <li><a href="{% url 'paint' %}">Paint</a></li>
+		        <li class="active"><a href="#">Personal Album</a></li>
+		        <li><a href="{% url 'friends' %}">Friends</a></li>
+		        <li><a href="{% url 'logout' %}">Log out</a></li>
+		      </ul>
+		      <ul class="side-nav" id="mobile-demo">
+		        <li><a href="{% url 'home' %}">Home</a></li>
+		        <li><a href="{% url 'paint' %}">Paint</a></li>
+		        <li class="active"><a href="#">Personal Album</a></li>
+		        <li><a href="{% url 'friends' %}">Friends</a></li>
+		        <li><a href="{% url 'logout' %}">Log out</a></li>
+		      </ul>
+		    </div>
+		  </nav>
+		</div>
+{% endblock %}
+
+
+{% block content %}
+    <div class="row">
+      <div class="col s3">
+      	<ul id="slide-out" class="side-nav fixed">
+          <li><div class="userView">
+            <div class="background">
+              <img src="{% static 'wah/images/background_small.jpg' %}">
+            </div>
+            <a href="{% url 'myalbum' %}">
+              {% if prof.photo %}
+                <img class="circle" src="{% url 'getavatar' user.username %}">
+              {% else %}
+                <img class="circle" src="{% static 'wah/images/default-avatar.jpg' %}">
+              {% endif %}
+            </a>
+            <span class="white-text name">{{prof.profile_user}} ({{prof.first_name}} {{prof.last_name}})</span>
+            <span class="white-text name">Age: {{prof.age}}</span>
+            <span class="white-text name">Bio: {{prof.bio}}</span>
+          </div></li>
+          <li><a class="waves-effect" id="create-album">CREATE ALBUM</a></li>
+        </ul>
+      </div>
+      <div class="col s9">
+          {% for album in albums %}
+              <div class="col s4">
+                  <div class="card small">
+                      <div class="card-image waves-effect waves-block waves-light" >
+                          {% if album.cover %}
+                          <a href="{% url 'view_album' album.id %}">
+                          <img src="{% url 'getcover' album.id %}">
+                          </a>
+                          {% else %}
+                          <a href="{% url 'view_album' album.id %}">
+                          <img src="{% static 'wah/images/default_cover.jpg' %}">
+                          </a>
+                          {% endif %}
+                      </div>
+                      <div class="card-content">
+                          <span class="card-title activator grey-text text-darken-4">{{ album.title }}<i class="material-icons right">more_vert</i></span>
+                          <p>{{ album.description }}</p>
+                      </div>
+                      <div class="card-reveal">
+                          <span class="card-title grey-text text-darken-4">{{ album.title }}<i class="material-icons right">close</i></span>
+                          <p>Painter: {{ album.user }}</p>
+                          <p>Likes: {{ album.likes }}</p>
+
+                          <div class="options" id="{{ album.id }}">
+                              <a class="dropdown-button" href="#" data-activates='visi_drop{{ album.id }}'>
+                                  <i class="small material-icons" id="icon{{ album.id }}">{{ album.visi_icon }}</i>
+                              </a>
+
+
+                              <a href="#"><i class="small material-icons like">star</i></a>
+                              <a class="modal-trigger" href="#delete_modal{{ album.id }}">
+                                  <i class="small material-icons">delete</i>
+                              </a>
+                          </div>
+
+                          <!-- dropdown of visibility-->
+                          <ul id='visi_drop{{ album.id }}' class='dropdown-content'>
+                              <li><a href="#!" class="visibility">public</a></li>
+                              <li><a href="#!" class="visibility">private</a></li>
+                              <li><a href="#!" class="visibility">friends</a></li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+          {% endfor %}
+      </div>
+    </div>
+
+    <!-- the modal used to create album-->
+    <div id="create-modal" class="create-modal">
+        <div class="modal-content">
+            <span class="close" id="close">x</span>
+            <form enctype="multipart/form-data" action="{% url 'createalbum' %}" method="post">
+                <table>{{ form }}</table>
+                <input type="submit" value="Create" class="btn">
+                {% csrf_token %}
+            </form>
+        </div>
+        <input type="hidden" id="error" value="{{ form.errors }}">
+    </div>
+
+    <!-- the modal used to delete album-->
+    {% for album in albums %}
+    <div id="delete_modal{{ album.id }}" class="modal">
+        <p>Are you sure you want to delete this album?</p>
+        <div class="modal-footer">
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+            <a href="{% url 'delete_album' album.id %}" class=" modal-action modal-close waves-effect waves-green btn-flat">Delete</a>
+        </div>
+    </div>
+    {% endfor %}
+
+{% endblock %}
+
+
+{% block addtional_js %}
+    <script type="text/javascript" src="{% static 'wah/js/my_album.js' %}"></script>
+{% endblock %}

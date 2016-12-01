@@ -1,0 +1,15 @@
+{% extends "wah/base.html" %}
+
+{% block title %}WhereAmazingHappen-Confirmed email{% endblock %}
+
+{% block content %}
+		<div class="title">
+			<h1 class="tt">Where Amazing Happens</h1>
+		</div>
+		<p class="text-middle">
+			You successfully confirm your email address. Now you can login to grumblr.
+		</p>
+		<div class="text-middle">
+			<a href="{% url 'login' %}" class="blue_font">Login</a>
+		</div>
+{% endblock %}
