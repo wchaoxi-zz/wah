@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'o2k&en=prm7j_=tktd_@!)&e09y1b=06jvj!$+3jk1ejebc53-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['ec2-54-90-85-190.compute-1.amazonaws.com', '54.90.85.190']
 
@@ -131,17 +131,16 @@ LOGIN_REDIRECT_URL='/wah/'
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = 'wah/static/'
+# STATIC_ROOT = 'wah/static/'
 
 # MEDIA_URL = '/media/'
 
-MEDIA_ROOT = 'wah/media/'
+# MEDIA_ROOT = 'wah/media/'
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.andrew.cmu.edu'
 EMAIL_HOST_USER = 'chaoxiw'
 EMAIL_HOST_PASSWORD = 'YANlu518@'
-EMAIL_PORT = '465'
 EMAIL_USE_TLS = True
 
 AWS_STORAGE_BUCKET_NAME = 'wahmedia'

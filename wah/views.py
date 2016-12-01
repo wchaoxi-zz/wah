@@ -55,7 +55,7 @@ def register(request):
     """%(request.get_host(),reverse('confirm',args=(new_user.id,token)))
     send_mail(subject="Verify your email address",
               message=email_body,
-              from_email="jingdonl@andrew.cmu.edu",
+              from_email="chaoxiw@andrew.cmu.edu",
               recipient_list=[new_user.email])
     context['email']=form.cleaned_data['email']
     new_profile = Profile(first_name = new_user.first_name, 
@@ -89,7 +89,7 @@ def home(request):
 
 
     context = {'user' : user, 'prof' : prof, 'albums' : pub_albums}
-    return render(request,'wah/Globalstream.html',context)
+    return render(request,'wah/GlobalStream.html',context)
 
 
 @login_required
@@ -396,7 +396,8 @@ def foreign_profile(request, username):
 def add_friends(request, username,album_id):
     my_profile = get_object_or_404(Profile, profile_user=request.user)
     add_friends = get_object_or_404(User, username=request.user)
-    friend_prof = get_object_or_404(Profile, profile_user=username)
+    friend = get_object_or_404(User, username=username)
+    friend_prof = get_object_or_404(Profile, profile_user=friend)
     if friend_prof.pending_friends.filter(username=request.user.username).count()==0 and friend_prof.friends.filter(username=request.user.username).count()==0:
         friend_prof.pending_friends.add(add_friends)
         friend_prof.save()
